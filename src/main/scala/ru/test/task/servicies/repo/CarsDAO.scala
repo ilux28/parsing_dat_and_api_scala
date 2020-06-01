@@ -8,10 +8,13 @@ import sun.util.calendar.LocalGregorianCalendar.Date
 
 import scala.collection.mutable.ArrayBuffer
 
+/***
+ * This class is implements a work with data base containing
+ * table "car"
+ */
 class CarsDAO {
 
   def insertCar(car: Car): Unit = {
-//    val conn = DBConnection.getConnection()
     val query = s"insert into car (number, mark, colour, date_of_issue) VALUES (?, ?, ?, ?)"
     PoolConnection.getConnection match {
       case Some(conn) => {
@@ -36,7 +39,6 @@ class CarsDAO {
   }
 
   def deleteCarByNumber(car: Car)= {
-//    val conn = DBConnection.getConnection()
     val query: String = "delete from car where number = ?"
     PoolConnection.getConnection match {
       case Some(conn) => {
@@ -58,7 +60,6 @@ class CarsDAO {
   }
 
   def updateByCar(car: Car): Unit = {
-//    val conn = DBConnection.getConnection()
     val query: String = "update car SET mark = ?, colour = ?, date_of_issue = ? WHERE number = ?"
     PoolConnection.getConnection match {
       case Some(conn) => {
@@ -85,7 +86,6 @@ class CarsDAO {
   }
 
   def getAllCars() = {
-//    val conn = DBConnection.getConnection()
     val query: String = "select * from car"
     val arrayCars = new ArrayBuffer[Car]()
 

@@ -34,8 +34,8 @@ import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutorService}
 
 /** *
- * EndPoint for service which receive json with msisdn and other params for subscriber, and
- * return json with offers for him
+ * EndPoint for service which receive json with car and other params for processing with BD, and
+ * return json with cars
  */
 
 object Main extends IOApp {
@@ -48,14 +48,6 @@ object Main extends IOApp {
   implicit val decoder = jsonOf[IO, Car]
 
   implicit val formats = DefaultFormats
-  implicit val CarEncoder: Encoder[Car] =
-    Encoder.instance { car: Car =>
-      json"""{"number": ${car.number},
-            "mark": ${car.mark},
-            "colour": ${car.colour},
-            "dateOfIssue": ${car.dateOfIssue}
-            }"""
-    }
   val carsDao: CarsDAO = CarsDAO()
   private def forMethodDB(functionCarProcessing: Car => Unit, req: Request[IO]) =  {
     for {
@@ -66,7 +58,7 @@ object Main extends IOApp {
       resp <- Ok(carsJson)
     } yield resp
   }
-  val rtimProxyServiceRoutes = HttpRoutes.of[IO] {
+  val carServiceRoutes = HttpRoutes.of[IO] {
     case GET -> Root =>
       val resResp = for {
           resp <- Ok(write(carsDao.getAllCars()))
@@ -86,7 +78,7 @@ object Main extends IOApp {
   def run(args: List[String]): IO[ExitCode] = {
     BlazeServerBuilder.apply[IO](ec)
       .bindHttp(8087, "localhost")
-      .withHttpApp(rtimProxyServiceRoutes)
+      .withHttpApp(carServiceRoutes)
       .serve
       .compile
       .drain

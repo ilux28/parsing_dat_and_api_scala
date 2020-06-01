@@ -5,7 +5,9 @@ import com.jolbox.bonecp.BoneCPConfig
 import org.slf4j.LoggerFactory
 import java.sql.Connection
 //import java.sql.DriverManager</code>
-
+/**
+ *  Object with pool connection for connection to Data Base
+ */
 object PoolConnection {
   val logger = LoggerFactory.getLogger(this.getClass)
   private val connectionPool = {

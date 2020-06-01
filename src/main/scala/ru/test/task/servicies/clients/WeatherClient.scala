@@ -8,10 +8,13 @@ import sttp.client.{Response, asStringAlways, basicRequest}
 import sttp.client._
 import cats.implicits._
 
+/***
+ * This class is the client for send json contains info with weather
+ * @param M
+ * @tparam F tagless final
+ */
 class WeatherClient [F[_]: ContextShift: Concurrent: FlatMap](M: MonadError[F, Throwable]) {
 
-  //    val accessToken = "access_token=96e28cd194719eebb1c717034384bfa4"
-  //  val accessToken = "96e28cd194719eebb1c717034384bfa4"
   val uriForWether = uri"https://data.gov.ru/api/json/dataset/7710349494-urals/version/20191105T160551/content/"
 
   def getDataForOil(): F[Response[String]] = {
@@ -23,7 +26,6 @@ class WeatherClient [F[_]: ContextShift: Concurrent: FlatMap](M: MonadError[F, T
         //.auth.bearer("96e28cd194719eebb1c717034384bfa4")
         .auth.basic("ilya.pribytko@mail.ru", "rilo123456")
         .contentType("application/json")
-        //        .body(formingJson.formRequestForProfile(msisdn, attributes))
         .send()
       for {
         tempContent <- response
